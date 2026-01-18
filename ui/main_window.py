@@ -6,7 +6,7 @@ from PySide6.QtCore import Qt
 
 from ui.home_page import HomePage
 from ui.testcase_page import TestCasePage
-from ui.analyze_page import AIRecommendPage
+from ui.ai_recommend_page import AIRecommendPage
 
 
 class MainWindow(QMainWindow):

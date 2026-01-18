@@ -1,0 +1,63 @@
+{
+  "priority_weights": {
+    "high": 3,
+    "medium": 2,
+    "low": 1
+  },
+  "security_weights": {
+    "high": 3,
+    "medium": 2,
+    "low": 1
+  },
+  "scenario": {
+    "weight": 2,
+    "cap": 30
+  },
+  "change_type": {
+    "Minor": 3,
+    "Major": 8
+  },
+  "requirement_type": {
+    "Common": 2,
+    "Local": 5
+  },
+  "platform": {
+    "Mobile": 2,
+    "Web": 2,
+    "Both": 4,
+    "Unknown": 1
+  },
+  "impacted_area_platform": {
+    "ICS": "Both",
+    "Android – GMS": "Mobile",
+    "Huawei – HMS": "Mobile",
+    "IPL Ass (Web Console)": "Web",
+    "RTS Server (API)": "Both"
+  },
+  "tester_discount": 2,
+  "forced_manual_actions": [
+    "Test Drive",
+    "Vehicle Support"
+  ],
+  "max_risk": 100,
+  "ratio_map": [
+    {
+      "min_risk": 75,
+      "type": "Manual",
+      "manual": 70,
+      "auto": 30
+    },
+    {
+      "min_risk": 50,
+      "type": "Hybrid",
+      "manual": 50,
+      "auto": 50
+    },
+    {
+      "min_risk": 0,
+      "type": "Automation",
+      "manual": 30,
+      "auto": 70
+    }
+  ]
+}

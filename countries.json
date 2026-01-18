@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Common",
+    "code": "",
+    "english_supported": true,
+    "local_language": null
+  },
+  {
+    "name": "Malaysia",
+    "code": "HMSB",
+    "english_supported": true,
+    "local_language": "Malay"
+  },
+  {
+    "name": "Vietnam",
+    "code": "HVN",
+    "english_supported": true,
+    "local_language": "Vietnamese"
+  },
+  {
+    "name": "Australia",
+    "code": "AUH",
+    "english_supported": true,
+    "local_language": "English"
+  },
+  {
+    "name": "New Zealand",
+    "code": "HNZ",
+    "english_supported": true,
+    "local_language": "English"
+  },
+  {
+    "name": "South Korea",
+    "code": "HKO",
+    "english_supported": true,
+    "local_language": "Korean"
+  },
+  {
+    "name": "Taiwan",
+    "code": "HTW",
+    "english_supported": true,
+    "local_language": "Mandarin"
+  },
+  {
+    "name": "Indonesia",
+    "code": "HPM",
+    "english_supported": true,
+    "local_language": "Indonesian"
+  },
+  {
+    "name": "Philippines",
+    "code": "HCPI",
+    "english_supported": true,
+    "local_language": "Filipino"
+  }
+]
