@@ -85,7 +85,13 @@ class MainWindow(QMainWindow):
         self.btn_testcase.clicked.connect(lambda: self.switch_page(1))
         self.btn_ai.clicked.connect(lambda: self.switch_page(2))
 
+        self.page_ai.ai_generated.connect(self.on_ai_generated)
+
         self.switch_page(0)
+
+    def on_ai_generated(self):
+        self.page_home.refresh_home()
+        self.switch_page(0)   # กลับ Home
 
     def switch_page(self, index: int):
         self.stack.setCurrentIndex(index)

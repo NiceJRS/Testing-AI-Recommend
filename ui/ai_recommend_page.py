@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
 )
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile, Qt, QMargins
+from PySide6.QtCore import QFile, Qt, QMargins, Signal
 from PySide6.QtGui import QPainter, QColor, QFont
 from PySide6.QtCharts import QChart, QChartView, QPieSeries
 
@@ -24,6 +24,8 @@ from PySide6.QtCharts import QChart, QChartView, QPieSeries
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class AIRecommendPage(QWidget):
+    ai_generated = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -322,8 +324,11 @@ class AIRecommendPage(QWidget):
                 "average_risk": avg_risk,
                 "manual_percent": ratio_result.get("manual_percent", 0),
                 "auto_percent": ratio_result.get("auto_percent", 0),
+                "changeType": requirement_type,
+                "requirement": requirement_type,
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
             }
+            self.ai_generated.emit()
 
             self._update_ui_with_results(scored_rows, ratio_result)
         except Exception as exc:
