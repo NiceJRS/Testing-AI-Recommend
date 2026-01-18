@@ -1,4 +1,5 @@
 from ai_engine import calculate_risk_score, calculate_test_ratio
+from datetime import datetime
 import logging
 from app_state import app_context
 from config_loader import load_countries, load_impacted_areas
@@ -94,8 +95,9 @@ class AIRecommendPage(QWidget):
         self.ui.groupBox_6.setTitle("User Adjustment")
         self.ui.horizontalSlider_2.setMinimum(0)
         self.ui.horizontalSlider_2.setMaximum(100)
-        self.ui.horizontalSlider_2.setValue(2)
-        self.ui.label_10.setText("Adjusting… Recalculating Risks…")
+        self.ui.horizontalSlider_2.setValue(0)
+        self.ui.horizontalSlider_2.setEnabled(False)
+        self.ui.label_10.setText("AI Risk Level: Low Risk (0%)")
 
         # Export Button
         self.ui.pushButton.setText("Export Test Case (.xlsx)")
@@ -310,6 +312,18 @@ class AIRecommendPage(QWidget):
                 f"Auto {ratio_result['auto_percent']}%"
             )
             app_context["ai_results"] = []
+            if scored_rows:
+                avg_risk = int(
+                    sum(row.get("risk_score", 0) for row in scored_rows) / len(scored_rows)
+                )
+            else:
+                avg_risk = 0
+            app_context["last_run"] = {
+                "average_risk": avg_risk,
+                "manual_percent": ratio_result.get("manual_percent", 0),
+                "auto_percent": ratio_result.get("auto_percent", 0),
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            }
 
             self._update_ui_with_results(scored_rows, ratio_result)
         except Exception as exc:
@@ -361,7 +375,13 @@ class AIRecommendPage(QWidget):
         self.auto_ratio_label.setText(
             f"Automation: {ratio_result.get('auto_percent', 0)}%"
         )
-        self.ui.label_10.setText("Recommendation generated.")
+        risk_level = "Low Risk"
+        if avg_risk >= 70:
+            risk_level = "High Risk"
+        elif avg_risk >= 40:
+            risk_level = "Medium Risk"
+        self.ui.horizontalSlider_2.setValue(int(avg_risk))
+        self.ui.label_10.setText(f"AI Risk Level: {risk_level} ({avg_risk}%)")
 
         ranked_rows = sorted(
             scored_rows,

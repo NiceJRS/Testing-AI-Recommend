@@ -85,9 +85,9 @@ def aggregate_service_rows(rows: Iterable[Dict]) -> Tuple[List[List[str]], List[
                 str(group["scenarios"]),
                 group["priority"],
                 group["security"],
-                group["country"],
                 "Y" if group["mobile"] else "N",
                 "Y" if group["web_console"] else "N",
+                   group["country"],
             ]
         )
 
