@@ -1,11 +1,5 @@
 [
   {
-    "name": "Common",
-    "code": "",
-    "english_supported": true,
-    "local_language": null
-  },
-  {
     "name": "Malaysia",
     "code": "HMSB",
     "english_supported": true,
@@ -52,5 +46,11 @@
     "code": "HCPI",
     "english_supported": true,
     "local_language": "Filipino"
+  },
+  {
+    "name": "Common",
+    "code": "",
+    "english_supported": true,
+    "local_language": null
   }
 ]

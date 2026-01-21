@@ -21,12 +21,14 @@ from PySide6.QtWidgets import (
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
 
+from utils.path_helper import resource_path
+
 class TestCasePage(QWidget):
     def __init__(self):
         super().__init__()
 
         loader = QUiLoader()
-        file = QFile("ui/testcase_page.ui")
+        file = QFile(str(resource_path("ui/testcase_page.ui")))
         file.open(QFile.ReadOnly)
         self.ui = loader.load(file, self)
         file.close()

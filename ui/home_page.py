@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import QWidget, QLabel
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
+
+from utils.path_helper import resource_path
 from PySide6.QtWidgets import QApplication, QProgressBar
 
 from app_state import app_context
@@ -11,7 +13,7 @@ class HomePage(QWidget):
         super().__init__()
 
         loader = QUiLoader()
-        file = QFile("ui/home_page.ui")
+        file = QFile(str(resource_path("ui/home_page.ui")))
         file.open(QFile.ReadOnly)
 
         self.ui = loader.load(file, self)

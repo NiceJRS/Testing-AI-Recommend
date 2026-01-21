@@ -91,7 +91,6 @@ class MainWindow(QMainWindow):
 
     def on_ai_generated(self):
         self.page_home.refresh_home()
-        self.switch_page(0)   # กลับ Home
 
     def switch_page(self, index: int):
         self.stack.setCurrentIndex(index)

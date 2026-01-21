@@ -2,7 +2,9 @@ import json
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-RULES_PATH = Path(__file__).with_name("ai_rules.json")
+from utils.path_helper import resource_path
+
+RULES_PATH = Path(resource_path("rules/ai_rules.json"))
 
 
 def load_rules(path: Optional[str] = None) -> Dict:

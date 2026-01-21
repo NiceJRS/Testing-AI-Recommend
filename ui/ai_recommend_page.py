@@ -20,6 +20,8 @@ from PySide6.QtCore import QFile, Qt, QMargins, Signal
 from PySide6.QtGui import QPainter, QColor, QFont
 from PySide6.QtCharts import QChart, QChartView, QPieSeries
 
+from utils.path_helper import resource_path
+
 # Configure logging
 logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -31,7 +33,7 @@ class AIRecommendPage(QWidget):
 
         # ---------- Load UI ----------
         loader = QUiLoader()
-        ui_file = QFile("ui/ai_recommend_page.ui")
+        ui_file = QFile(str(resource_path("ui/ai_recommend_page.ui")))
         ui_file.open(QFile.ReadOnly)
 
         self.ui = loader.load(ui_file, self)
