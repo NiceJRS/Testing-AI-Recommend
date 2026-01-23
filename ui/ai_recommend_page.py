@@ -40,6 +40,8 @@ class AIRecommendPage(QWidget):
         ui_file.close()
 
         self.setLayout(self.ui.layout())
+        # QGroupBox styling can hide native radio indicators on Win11
+        self._apply_radio_indicator_style()
         self._apply_dpi_safe_layouts()
 
         # =================================================
@@ -150,6 +152,24 @@ class AIRecommendPage(QWidget):
                 QSizePolicy.Expanding,
                 QSizePolicy.Expanding
             )
+
+    def _apply_radio_indicator_style(self):
+        self.setStyleSheet(
+            self.styleSheet()
+            + """
+            QRadioButton::indicator {
+                width: 14px;
+                height: 14px;
+                border-radius: 7px;
+                border: 2px solid #6b6b6b;
+                background: #ffffff;
+            }
+            QRadioButton::indicator:checked {
+                border: 2px solid #d32f2f;
+                background-color: #d32f2f;
+            }
+            """
+        )
 
     def setup_recommended_ratio_chart(self):
         """Replace the text label with a donut chart showing manual vs auto."""
