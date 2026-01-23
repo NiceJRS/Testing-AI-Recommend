@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
-    QPushButton, QLabel, QStackedWidget
+    QPushButton, QLabel, QStackedWidget, QSizePolicy
 )
 from PySide6.QtCore import Qt
 
@@ -15,8 +15,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Testing AI Recommend")
 
-        # 🔥 FIXED SIZE DESKTOP APP
-        self.setFixedSize(1200, 720)
+        # DPI-safe: allow resize while keeping a minimum size
+        self.setMinimumSize(1200, 720)
 
         # ---- Central ----
         central = QWidget()
@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
         # ---- Sidebar ----
         sidebar = QWidget()
         sidebar.setFixedWidth(220)
+        sidebar.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         sidebar.setStyleSheet("background-color: #2b2b2b;")
 
         sidebar_layout = QVBoxLayout(sidebar)
@@ -46,7 +47,8 @@ class MainWindow(QMainWindow):
         self.btn_ai = QPushButton("🚀  AI Recommend")
 
         for btn in (self.btn_home, self.btn_testcase, self.btn_ai):
-            btn.setFixedHeight(44)
+            btn.setMinimumHeight(44)
+            btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             btn.setCheckable(True)
             btn.setStyleSheet("""
                 QPushButton {

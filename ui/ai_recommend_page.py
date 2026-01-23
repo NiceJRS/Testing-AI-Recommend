@@ -4,7 +4,6 @@ import logging
 from app_state import app_context
 from config_loader import load_countries, load_impacted_areas
 from excel_exporter import export_ai_recommend_excel
-from datetime import datetime
 from filter_utils import filter_rows
 from service_aggregation import aggregate_service_rows
 from PySide6.QtWidgets import (
@@ -14,6 +13,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QCheckBox,
     QFileDialog,
+    QSizePolicy,
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QMargins, Signal
@@ -40,6 +40,7 @@ class AIRecommendPage(QWidget):
         ui_file.close()
 
         self.setLayout(self.ui.layout())
+        self._apply_dpi_safe_layouts()
 
         # =================================================
         # LEFT SIDE : CONFIGURATION (Input)
@@ -121,6 +122,34 @@ class AIRecommendPage(QWidget):
         label.setStyleSheet("color: white; font-weight: 700; font-size: 14px;")
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
+
+    def _apply_dpi_safe_layouts(self):
+        # LEFT SIDEBAR (must NOT expand horizontally)
+        widget_left = self.ui.findChild(QWidget, "widget_left")
+        if widget_left:
+            widget_left.setMinimumWidth(240)
+            widget_left.setMaximumWidth(260)
+            widget_left.setSizePolicy(
+                QSizePolicy.Fixed,
+                QSizePolicy.Expanding
+            )
+
+        # Left-side group boxes: vertical grow only
+        for name in ("groupBox", "groupBox_2", "groupBox_3", "groupBox_7", "groupBox_8"):
+            group = self.ui.findChild(QWidget, name)
+            if group:
+                group.setSizePolicy(
+                    QSizePolicy.Preferred,
+                    QSizePolicy.Maximum
+                )   
+
+        # Right-side main content should take remaining space
+        widget_right = self.ui.findChild(QWidget, "widget_right")
+        if widget_right:
+            widget_right.setSizePolicy(
+                QSizePolicy.Expanding,
+                QSizePolicy.Expanding
+            )
 
     def setup_recommended_ratio_chart(self):
         """Replace the text label with a donut chart showing manual vs auto."""

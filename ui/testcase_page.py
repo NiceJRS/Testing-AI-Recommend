@@ -43,6 +43,9 @@ class TestCasePage(QWidget):
         model.rowsInserted.connect(lambda *_: self.apply_row_styling())
         model.modelReset.connect(self.apply_row_styling)
         model.layoutChanged.connect(self.apply_row_styling)
+        self.table.selectionModel().selectionChanged.connect(
+            lambda *_: self._sync_widget_selection()
+        )
 
         self.load_mock_data()
         self.apply_row_styling()
@@ -290,11 +293,19 @@ class TestCasePage(QWidget):
         header.setDefaultAlignment(Qt.AlignCenter | Qt.AlignVCenter)
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
         SERVICE_COL = 1
+        PRIORITY_COL = 3
+        SECURITY_COL = 4
         COUNTRY_COL = 7
 
         header.setSectionResizeMode(SERVICE_COL, QHeaderView.Stretch)
         header.setSectionResizeMode(COUNTRY_COL, QHeaderView.Stretch)
-        header.setFixedHeight(44)
+        # DPI-safe: keep Priority/Security columns consistent width
+        header.setSectionResizeMode(PRIORITY_COL, QHeaderView.Fixed)
+        header.setSectionResizeMode(SECURITY_COL, QHeaderView.Fixed)
+        self.table.setColumnWidth(PRIORITY_COL, 140)
+        self.table.setColumnWidth(SECURITY_COL, 140)
+        # DPI-safe: allow header to grow if needed
+        header.setMinimumHeight(44)
         header.setStyleSheet(
             "QHeaderView::section {"
             "background-color: #3f3f3f;"
@@ -335,6 +346,8 @@ class TestCasePage(QWidget):
             self._update_security_cell(row)
             self._update_boolean_cell(row, 5)
             self._update_boolean_cell(row, 6)
+        # setCellWidget does not inherit selection styles automatically
+        self._sync_widget_selection()
 
     def _update_service_badge(self, row: int):
         service_col = 1
@@ -373,7 +386,7 @@ class TestCasePage(QWidget):
         if not item:
             return
         widget = self._create_progress_widget(item.text(), show_label=False)
-        self.table.setCellWidget(row, priority_col, widget)
+        self.table.setCellWidget(row, priority_col, self._center_cell(widget))
         item.setText("")
 
     def _update_security_cell(self, row: int):
@@ -383,7 +396,7 @@ class TestCasePage(QWidget):
             return
 
         widget = self._create_progress_widget(item.text(), show_label=False)
-        self.table.setCellWidget(row, security_col, widget)
+        self.table.setCellWidget(row, security_col, self._center_cell(widget))
         item.setText("")
 
     def _update_boolean_cell(self, row: int, column: int):
@@ -410,7 +423,7 @@ class TestCasePage(QWidget):
 
         # --- Track ---
         track = QFrame()
-        track.setFixedHeight(10)
+        track.setMinimumHeight(10)
         track.setStyleSheet(
             "background-color: #e1e1e1; border-radius: 5px;"
         )
@@ -458,12 +471,36 @@ class TestCasePage(QWidget):
 
         return center
 
+    def _center_cell(self, widget: QWidget) -> QWidget:
+        """Center custom widgets to prevent DPI drift in fixed-width columns."""
+        container = QWidget()
+        layout = QHBoxLayout(container)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setAlignment(Qt.AlignCenter)
+        layout.addWidget(widget)
+        return container
+
+    def _sync_widget_selection(self):
+        selected_rows = {idx.row() for idx in self.table.selectionModel().selectedRows()}
+        selected_color = "#0b74d1"
+        for row in range(self.table.rowCount()):
+            is_selected = row in selected_rows
+            for col in (3, 4):
+                widget = self.table.cellWidget(row, col)
+                if widget is None:
+                    continue
+                if is_selected:
+                    widget.setStyleSheet(f"background-color: {selected_color};")
+                else:
+                    widget.setStyleSheet("background-color: transparent;")
+
 
 
     def _create_boolean_indicator(self, checked: bool) -> QWidget:
         label = QLabel("✓" if checked else "✕")
         label.setAlignment(Qt.AlignCenter)
-        label.setFixedSize(20, 20)
+        label.setMinimumSize(20, 20)
+        label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         if checked:
             label.setStyleSheet("""
